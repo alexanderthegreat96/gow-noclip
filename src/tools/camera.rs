@@ -9,14 +9,11 @@ pub struct Basis {
     pub forward: [f32; 3],
 }
 
-/// The active in-game camera. Resolved leaf addresses for yaw / pitch /
-/// basis vectors on the global camera struct.
 pub struct Camera {
     game: Arc<Game>,
     yaw: usize,
     pitch: usize,
     right_vec: usize,
-    /// Struct stores the negation of "forward" (view-space "behind" vector).
     back_vec: usize,
 }
 

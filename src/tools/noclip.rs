@@ -73,7 +73,7 @@ impl NoClip {
         let session = self.session.lock().unwrap();
         let player = &session.as_ref()?.0;
         let cur = player.height()?;
-        let new_target = cur + delta * 3.0; // matches the old +1.5 for delta=0.5
+        let new_target = cur + delta * 3.0;
         player.adjust_height(delta)?;
         *self.target_height.lock().unwrap() = Some(new_target);
         Some(())
