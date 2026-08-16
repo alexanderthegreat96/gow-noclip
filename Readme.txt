@@ -1,77 +1,64 @@
-GoWR No-Clip Tool (God of War: Ragnarok - PC)
-=============================================
+GOWR NO-CLIP
+============
 
-A Rust-based no-clip movement tool for God of War: Ragnarok (PC).
+REQUIREMENTS
+------------
+- Windows (10 or 11)
+- God of War Ragnarok on PC
+- Single-player only. Do not use online.
 
-This tool lets you move Kratos in real time by directly manipulating game memory.
-It was built as a reverse engineering and Rust experiment — because why should C++ have all the fun?
 
-----------------------------------------------------
-✨ Features
-----------------------------------------------------
+HOW TO USE
+----------
+1. Launch God of War Ragnarok. Wait until you are in-game (not on
+   the main menu).
+2. Run gow_tools.exe.
+3. If SmartScreen or your antivirus complains, click "More info"
+   -> "Run anyway". The tool reads/writes the game's memory, which
+   is the kind of thing anti-cheat and AV heuristics flag.
+4. Alt-tab back to the game. The tool runs in the background and
+   listens for hotkeys globally -- you don't need to focus its
+   window.
 
-✅ WASD – Move Kratos (camera-relative)
-✅ LSHIFT / LCTRL – Move up / down vertically
-✅ Q / E – Rotate camera left / right
-✅ G – Toggle No-Clip Mode (enable/disable live movement)
-✅ L – Lock gravity (freeze vertical movement)
-✅ U – Unlock gravity (restore gravity)
-✅ Target height lock – Prevents vertical drift during flight
-✅ Command console – Control with typed commands
-✅ Atomic threading – Ultra responsive controls
-✅ Uses libmem (by rdbo) for memory editing
 
-----------------------------------------------------
-🖥️ Console Commands
-----------------------------------------------------
+CONTROLS
+--------
+  G         toggle no-clip on / off
+  W         move forward (in the direction the camera is looking)
+  S         move backward
+  A         strafe left
+  D         strafe right
+  LSHIFT    ascend
+  LCTRL     descend
+  L         lock gravity (freeze -- you stop falling)
+  U         unlock gravity (normal falling behaviour)
+  X         quit the tool
 
-While the tool is running, you can also type commands directly into the terminal:
+Note: since the tool listens to your keyboard globally, X quits it
+even while you are focused on the game. Just something to be aware
+of if you have X bound to a game action.
 
-Command   | Action
-----------|-------------------------------
-w         | Move forward
-s         | Move backward
-a         | Move left
-d         | Move right
-q         | Rotate left
-e         | Rotate right
-l         | Lock gravity
-u         | Unlock gravity
-x         | Exit the program
 
-----------------------------------------------------
-🚀 How to Use
-----------------------------------------------------
+TROUBLESHOOTING
+---------------
+"process 'GoWR.exe' not found. is the game running?"
+    Launch the game first, wait until you are past the main menu,
+    then run gow_tools.exe.
 
-1. **Launch God of War: Ragnarok (PC)**
-   - Wait until Kratos is in-game and controllable.
+Pressing WASD in-game does nothing.
+    Press G first. No-clip is off by default -- G toggles it on.
 
-2. **Run the No-Clip Tool**
-   - Open a terminal or double-click the compiled executable.
+I fell through the map.
+    That happens if gravity is unlocked and you clip into the world.
+    Press L to re-lock gravity, or LSHIFT to bump yourself back up.
 
-3. **Use hotkeys to fly around**
-   - Press G to toggle no-clip mode ON/OFF.
-   - Use W/A/S/D to move, Q/E to rotate, LSHIFT/LCTRL to fly up/down.
+Terrain / textures aren't loading in new areas.
+    The game streams assets as you move. If you fly faster than it
+    can load, you'll outrun the streamer. Slow down (stop moving for
+    a couple seconds) and things will pop in.
 
-4. **Type commands into the terminal**
-   - If you prefer command input, just type `w`, `l`, or `x` into the console window.
+Weird animation glitches on Kratos.
+    Toggle no-clip off (G) and let the game settle for a second.
+    You may also want to reload a save.
 
-5. **Exit anytime**
-   - Press `x` in the terminal or close the window.
-
-----------------------------------------------------
-⚠️ Notes
-----------------------------------------------------
-
-- Built for **educational purposes** — don’t use it in multiplayer.
-- Only works on the **PC version** of God of War: Ragnarok.
-- May require **Administrator permissions** to access game memory.
-- Works best in **borderless windowed** mode.
-
-----------------------------------------------------
-👨‍💻 Credits
-----------------------------------------------------
-
-- Made with ❤️ in Rust
-- Memory manipulation powered by [libmem](https://github.com/rdbo/libmem)
-- Created to learn reverse engineering and real-time game control in Rust
+--

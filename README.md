@@ -1,59 +1,47 @@
-# GoWR No-Clip Tool
+# God Of War: Ragnarok - No Clip
 
-A Rust-based no-clip movement tool for *God of War: Ragnarok* (PC).  
-This tool allows you to manipulate Kratos' position and gravity in real-time by writing directly to memory.
+Fly around God of War Ragnarok on PC. Windows only. Launch the game, then launch this.
 
-> I built this to teach myself how to reverse engineer memory and control game state using Rust.  
-> Everyone's doing this in C++ — Rust deserves some love too, man.
+### Important
+This will probably not work properly with a controller. I did not test it. But on mouse and keyboard, it works fine. I am saying this, simply because, you do use your mouse to pan the camera.
 
----
+## Controls
 
-## ✨ Features
+- **G** — toggle no-clip
+- **X** — kill the program
+- **WASD** — move relative to camera (yaw AND pitch, so mid-air feels right)
+- **LShift / LCtrl** — ascend / descend
+- **L / U** — lock / unlock gravity (default: locked, so you don't yeet through the map)
 
-- ✅ **W / A / S / D** – Move Kratos forward, left, back, right (camera-relative)
-- ✅ **LSHIFT / LCTRL** – Move up / down vertically
-- ✅ **Q / E** – Rotate Left / Right
-- ✅ **G** – Toggle No-Clip Mode (enables or disables live input injection)
-- ✅ **L** – Lock gravity (prevents falling by freezing vertical acceleration)
-- ✅ **U** – Unlock gravity (restores default falling behavior)
-- ✅ **Target height lock** – Maintains Y position while flying
-- ✅ **Command console** – Type commands like `w`, `q`, `e`, `l`, `u`, `x` directly
-- ✅ **Atomic threading** – Clean and responsive real-time control
-- ✅ Built with `libmem` (by [rdbo](https://github.com/rdbo/libmem)) for memory editing
+## How it hooks in
 
----
+External. No DLL injection, no code hooks. Attaches with [`libmem`](https://github.com/rdbo/libmem) and reads/writes memory directly. Two anchors, both static offsets from `GoWR.exe`:
 
-## 🖥️ Console Commands
+- **Player entity** at `[+0x29EBB00]` — position `Vec4` at `+0x3E0`, world-up at `+0x3E4`, body yaw at `+0x400`, vertical accel at `+0x3F4`.
+- **Active camera** at `[+0x4025928]` — output yaw at `+0x12DC`, pitch at `+0x12E0`, right/up/back basis vectors at `+0xF00 / +0xF10 / +0xF20`.
 
-While running the app, you can also type commands into the terminal:
+Movement math is `dx = right · intent_x + forward · intent_z`, where `forward = -back` (the game stores view-space "behind"). No trig, no gimbal weirdness, pitch is honored for free.
 
-| Command | Description                         |
-|---------|-------------------------------------|
-| `w/s/a/d` | Move instantly (same as hotkeys)  |
-| `q/e`     | Adjust height up/down             |
-| `l/u`     | Lock or unlock gravity            |
-| `x`       | Exit the program                  |
+## RE notes
 
----
+The old build used a yaw pointer chain that went dead after a game patch. Value scans were drowning in coincidental hits until I found the script binding table (currently `sub_7FF7A0CCF4E0`) — GoWR exposes a scripting API and every `GetOrbitForward` / `GetOutputYaw` binding decompiles into a one-liner that reads the actual camera field. Ten minutes of IDA got what a whole day of scanning couldn't. (God, I love IDA).
 
-## Screenshots
-![tools](gopw-tools-img.png)
-![demo](gow-tools-demo.png)
-![demo2](gow-tools-demo-2.png)
+There was also a fun aliasing bug in the old code: `FORWARD_PTR` and `LEFT_RIGHT_PTR` resolved to the same 4 bytes, so both writes hit the same address and the second one won. That's why WASD felt like it was rotating with the camera before — it wasn't; you were only ever moving on one axis at a time. Fixed.
 
-## 🛠 Dependencies
-
-- [`libmem`](https://github.com/rdbo/libmem) – Rust memory editing abstraction
-- [`device_query`](https://crates.io/crates/device_query) – Key input handling
-- [`figlet-rs`](https://crates.io/crates/figlet-rs) – ASCII banner
-
----
-## 🚀 Build Instructions
-
-Make sure you have Rust installed:  
-https://www.rust-lang.org/tools/install
-
-Then build the project:
+## Build
 
 ```bash
 cargo build --release
+```
+
+## Deps
+
+- [`libmem`](https://github.com/rdbo/libmem) — memory RW
+- [`device_query`](https://crates.io/crates/device_query) — keyboard polling
+- `figlet-rs` — historical (was for the banner, unused now)
+
+## Screenshots
+
+![tools](gopw-tools-img-n.png)
+![demo](gow-tools-demo.png)
+![demo2](gow-tools-demo-2.png)

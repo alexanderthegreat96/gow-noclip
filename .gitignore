@@ -39,3 +39,4 @@ Cargo.lock      # If you're making a library crate, consider including this!
 /fuzz/target/
 /coverage/
 /*.profraw
+.claude

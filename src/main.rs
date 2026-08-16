@@ -3,8 +3,8 @@ mod tools;
 fn main() {
     println!(
         "+-----------------------------------+\n\
-         | GOW Ragnarok No-Clip v1.1.4      |\n\
-         | (c) 2025 alexanderdth            |\n\
+         | GOW Ragnarok No-Clip v1.3.0       |\n\
+         | (c) 2026 alexanderdth             |\n\
          +-----------------------------------+"
     );
 
