@@ -2,8 +2,6 @@ use crate::tools::game::Game;
 use crate::tools::memory_mappings;
 use std::sync::Arc;
 
-/// Camera's world-space basis in a script-friendly convention:
-/// `forward` is the direction the camera is looking (already negated).
 pub struct Basis {
     pub right: [f32; 3],
     pub forward: [f32; 3],
