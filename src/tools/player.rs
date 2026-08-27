@@ -12,11 +12,12 @@ pub struct Player {
 
 impl Player {
     pub fn attach(game: Arc<Game>) -> Option<Self> {
+        let entity = game.entity_ptr()?;
         Some(Self {
-            pos: game.resolve(memory_mappings::entity::POS_X)?,
-            pos_mirror: game.resolve(memory_mappings::entity::POS_MIRROR)?,
-            accel: game.resolve(memory_mappings::entity::ACCEL)?,
-            body_yaw: game.resolve(memory_mappings::entity::BODY_YAW)?,
+            pos: entity + memory_mappings::entity::POS_X_OFFSET,
+            pos_mirror: entity + memory_mappings::entity::POS_MIRROR_OFFSET,
+            accel: entity + memory_mappings::entity::ACCEL_OFFSET,
+            body_yaw: entity + memory_mappings::entity::BODY_YAW_OFFSET,
             game,
         })
     }

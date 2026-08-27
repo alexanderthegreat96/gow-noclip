@@ -17,11 +17,13 @@ pub struct Camera {
 
 impl Camera {
     pub fn attach(game: Arc<Game>) -> Option<Self> {
+        // Use the sig-resolved (or fallback) camera struct pointer.
+        let cam = game.camera_ptr()?;
         Some(Self {
-            yaw: game.resolve(memory_mappings::camera::YAW)?,
-            pitch: game.resolve(memory_mappings::camera::PITCH)?,
-            right_vec: game.resolve(memory_mappings::camera::LEFT_VEC)?,
-            back_vec: game.resolve(memory_mappings::camera::FORWARD_VEC)?,
+            yaw: cam + memory_mappings::camera::YAW_OFFSET,
+            pitch: cam + memory_mappings::camera::PITCH_OFFSET,
+            right_vec: cam + memory_mappings::camera::LEFT_VEC_OFFSET,
+            back_vec: cam + memory_mappings::camera::FORWARD_VEC_OFFSET,
             game,
         })
     }
